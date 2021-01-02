@@ -1,0 +1,616 @@
+{
+  "profile": "tabular-data-package",
+  "resources": [
+    {
+      "name": "SSI_muni",
+      "path": "Municipality_cases_time_series.csv",
+      "profile": "tabular-data-resource",
+      "schema": {
+        "fields": [
+          {
+            "name": "date_sample",
+            "type": "integer",
+            "format": "default",
+            "title": "Dates",
+            "description": "Dates"
+          },
+          {
+            "name": "Roskilde",
+            "type": "integer",
+            "format": "default",
+            "description": "All other columns are municipalities pr day cases",
+            "title": "New cases per day Roskilde"
+          },
+          {
+            "name": "Copenhagen",
+            "type": "integer",
+            "format": "default"
+          },
+          {
+            "name": "Aarhus",
+            "type": "integer",
+            "format": "default"
+          },
+          {
+            "name": "Frederiksberg",
+            "type": "integer",
+            "format": "default"
+          },
+          {
+            "name": "Kalundborg",
+            "type": "integer",
+            "format": "default"
+          },
+          {
+            "name": "Middelfart",
+            "type": "integer",
+            "format": "default"
+          },
+          {
+            "name": "Gentofte",
+            "type": "integer",
+            "format": "default"
+          },
+          {
+            "name": "Solrød",
+            "type": "integer",
+            "format": "default"
+          },
+          {
+            "name": "Allerød",
+            "type": "integer",
+            "format": "default"
+          },
+          {
+            "name": "Dragør",
+            "type": "integer",
+            "format": "default"
+          },
+          {
+            "name": "Helsingør",
+            "type": "integer",
+            "format": "default"
+          },
+          {
+            "name": "Hillerød",
+            "type": "integer",
+            "format": "default"
+          },
+          {
+            "name": "Rudersdal",
+            "type": "integer",
+            "format": "default"
+          },
+          {
+            "name": "Næstved",
+            "type": "integer",
+            "format": "default"
+          },
+          {
+            "name": "Aalborg",
+            "type": "integer",
+            "format": "default"
+          },
+          {
+            "name": "Vallensbæk",
+            "type": "integer",
+            "format": "default"
+          },
+          {
+            "name": "Esbjerg",
+            "type": "integer",
+            "format": "default"
+          },
+          {
+            "name": "Favrskov",
+            "type": "integer",
+            "format": "default"
+          },
+          {
+            "name": "Frederikssund",
+            "type": "integer",
+            "format": "default"
+          },
+          {
+            "name": "Furesø",
+            "type": "integer",
+            "format": "default"
+          },
+          {
+            "name": "Greve",
+            "type": "integer",
+            "format": "default"
+          },
+          {
+            "name": "Holbæk",
+            "type": "integer",
+            "format": "default"
+          },
+          {
+            "name": "Kolding",
+            "type": "integer",
+            "format": "default"
+          },
+          {
+            "name": "Odense",
+            "type": "integer",
+            "format": "default"
+          },
+          {
+            "name": "Silkeborg",
+            "type": "integer",
+            "format": "default"
+          },
+          {
+            "name": "Skanderborg",
+            "type": "integer",
+            "format": "default"
+          },
+          {
+            "name": "Vejle",
+            "type": "integer",
+            "format": "default"
+          },
+          {
+            "name": "Aabenraa",
+            "type": "integer",
+            "format": "default"
+          },
+          {
+            "name": "Ballerup",
+            "type": "integer",
+            "format": "default"
+          },
+          {
+            "name": "Egedal",
+            "type": "integer",
+            "format": "default"
+          },
+          {
+            "name": "Faxe",
+            "type": "integer",
+            "format": "default"
+          },
+          {
+            "name": "Fredericia",
+            "type": "integer",
+            "format": "default"
+          },
+          {
+            "name": "Faaborg-Midtfyn",
+            "type": "integer",
+            "format": "default"
+          },
+          {
+            "name": "Gladsaxe",
+            "type": "integer",
+            "format": "default"
+          },
+          {
+            "name": "Guldborgsund",
+            "type": "integer",
+            "format": "default"
+          },
+          {
+            "name": "Haderslev",
+            "type": "integer",
+            "format": "default"
+          },
+          {
+            "name": "Halsnæs",
+            "type": "integer",
+            "format": "default"
+          },
+          {
+            "name": "Herlev",
+            "type": "integer",
+            "format": "default"
+          },
+          {
+            "name": "Herning",
+            "type": "integer",
+            "format": "default"
+          },
+          {
+            "name": "Hjørring",
+            "type": "integer",
+            "format": "default"
+          },
+          {
+            "name": "Horsens",
+            "type": "integer",
+            "format": "default"
+          },
+          {
+            "name": "Hvidovre",
+            "type": "integer",
+            "format": "default"
+          },
+          {
+            "name": "Hørsholm",
+            "type": "integer",
+            "format": "default"
+          },
+          {
+            "name": "Køge",
+            "type": "integer",
+            "format": "default"
+          },
+          {
+            "name": "Lejre",
+            "type": "integer",
+            "format": "default"
+          },
+          {
+            "name": "Lolland",
+            "type": "integer",
+            "format": "default"
+          },
+          {
+            "name": "Lyngby-Taarbæk",
+            "type": "integer",
+            "format": "default"
+          },
+          {
+            "name": "Nordfyns",
+            "type": "integer",
+            "format": "default"
+          },
+          {
+            "name": "Nyborg",
+            "type": "integer",
+            "format": "default"
+          },
+          {
+            "name": "Randers",
+            "type": "integer",
+            "format": "default"
+          },
+          {
+            "name": "Rødovre",
+            "type": "integer",
+            "format": "default"
+          },
+          {
+            "name": "Skive",
+            "type": "integer",
+            "format": "default"
+          },
+          {
+            "name": "Slagelse",
+            "type": "integer",
+            "format": "default"
+          },
+          {
+            "name": "Sorø",
+            "type": "integer",
+            "format": "default"
+          },
+          {
+            "name": "Stevns",
+            "type": "integer",
+            "format": "default"
+          },
+          {
+            "name": "Svendborg",
+            "type": "integer",
+            "format": "default"
+          },
+          {
+            "name": "Syddjurs",
+            "type": "integer",
+            "format": "default"
+          },
+          {
+            "name": "Sønderborg",
+            "type": "integer",
+            "format": "default"
+          },
+          {
+            "name": "Vejen",
+            "type": "integer",
+            "format": "default"
+          },
+          {
+            "name": "Viborg",
+            "type": "integer",
+            "format": "default"
+          },
+          {
+            "name": "Vordingborg",
+            "type": "integer",
+            "format": "default"
+          },
+          {
+            "name": "Billund",
+            "type": "integer",
+            "format": "default"
+          },
+          {
+            "name": "Brøndby",
+            "type": "integer",
+            "format": "default"
+          },
+          {
+            "name": "Frederikshavn",
+            "type": "integer",
+            "format": "default"
+          },
+          {
+            "name": "Gribskov",
+            "type": "integer",
+            "format": "default"
+          },
+          {
+            "name": "Holstebro",
+            "type": "integer",
+            "format": "default"
+          },
+          {
+            "name": "Kerteminde",
+            "type": "integer",
+            "format": "default"
+          },
+          {
+            "name": "Mariagerfjord",
+            "type": "integer",
+            "format": "default"
+          },
+          {
+            "name": "Norddjurs",
+            "type": "integer",
+            "format": "default"
+          },
+          {
+            "name": "Odder",
+            "type": "integer",
+            "format": "default"
+          },
+          {
+            "name": "Odsherred",
+            "type": "integer",
+            "format": "default"
+          },
+          {
+            "name": "Rebild",
+            "type": "integer",
+            "format": "default"
+          },
+          {
+            "name": "Ringkøbing-Skjern",
+            "type": "integer",
+            "format": "default"
+          },
+          {
+            "name": "Vesthimmerlands",
+            "type": "integer",
+            "format": "default"
+          },
+          {
+            "name": "Glostrup",
+            "type": "integer",
+            "format": "default"
+          },
+          {
+            "name": "Høje-Taastrup",
+            "type": "integer",
+            "format": "default"
+          },
+          {
+            "name": "Jammerbugt",
+            "type": "integer",
+            "format": "default"
+          },
+          {
+            "name": "Morsø",
+            "type": "integer",
+            "format": "default"
+          },
+          {
+            "name": "Thisted",
+            "type": "integer",
+            "format": "default"
+          },
+          {
+            "name": "Tønder",
+            "type": "integer",
+            "format": "default"
+          },
+          {
+            "name": "Tårnby",
+            "type": "integer",
+            "format": "default"
+          },
+          {
+            "name": "Assens",
+            "type": "integer",
+            "format": "default"
+          },
+          {
+            "name": "Fredensborg",
+            "type": "integer",
+            "format": "default"
+          },
+          {
+            "name": "Ishøj",
+            "type": "integer",
+            "format": "default"
+          },
+          {
+            "name": "Lemvig",
+            "type": "integer",
+            "format": "default"
+          },
+          {
+            "name": "Albertslund",
+            "type": "integer",
+            "format": "default"
+          },
+          {
+            "name": "Bornholm",
+            "type": "integer",
+            "format": "default"
+          },
+          {
+            "name": "Ikast-Brande",
+            "type": "integer",
+            "format": "default"
+          },
+          {
+            "name": "Langeland",
+            "type": "integer",
+            "format": "default"
+          },
+          {
+            "name": "Ringsted",
+            "type": "integer",
+            "format": "default"
+          },
+          {
+            "name": "Struer",
+            "type": "integer",
+            "format": "default"
+          },
+          {
+            "name": "Brønderslev",
+            "type": "integer",
+            "format": "default"
+          },
+          {
+            "name": "Hedensted",
+            "type": "integer",
+            "format": "default"
+          },
+          {
+            "name": "Varde",
+            "type": "integer",
+            "format": "default"
+          },
+          {
+            "name": "Læsø",
+            "type": "integer",
+            "format": "default"
+          },
+          {
+            "name": "Ærø",
+            "type": "integer",
+            "format": "default"
+          },
+          {
+            "name": "Fanø",
+            "type": "integer",
+            "format": "default"
+          },
+          {
+            "name": "Samsø",
+            "type": "integer",
+            "format": "default"
+          },
+          {
+            "name": "NA",
+            "type": "integer",
+            "format": "default"
+          }
+        ]
+      }
+    },
+    {
+      "name": "Newly_admitted_regions",
+      "path": "Newly_admitted_over_time.csv",
+      "profile": "tabular-data-resource",
+      "schema": {
+        "fields": [
+          {
+            "name": "Dato",
+            "type": "integer",
+            "format": "default",
+            "title": "Date",
+            "description": "Dates"
+          },
+          {
+            "name": "Hovedstaden",
+            "type": "integer",
+            "format": "default",
+            "title": "Newly hospitalized in Hovedstaden",
+            "description": "All other columns are newly hospitalized per region"
+          },
+          {
+            "name": "Sjælland",
+            "type": "integer",
+            "format": "default"
+          },
+          {
+            "name": "Syddanmark",
+            "type": "integer",
+            "format": "default"
+          },
+          {
+            "name": "Midtjylland",
+            "type": "integer",
+            "format": "default"
+          },
+          {
+            "name": "Nordjylland",
+            "type": "integer",
+            "format": "default"
+          },
+          {
+            "name": "Ukendt Region",
+            "type": "integer",
+            "format": "default"
+          },
+          {
+            "name": "Total",
+            "type": "integer",
+            "format": "default"
+          }
+        ]
+      }
+    },
+    {
+      "name": "Muni_test_pos",
+      "path": "Municipality_test_pos.csv",
+      "profile": "tabular-data-resource",
+      "schema": {
+        "fields": [
+          {
+            "name": "Kommune_(id)",
+            "type": "integer",
+            "format": "default",
+            "title": "Municipality ID"
+          },
+          {
+            "name": "Kommune_(navn)",
+            "type": "string",
+            "format": "default",
+            "title": "Municipality Name"
+          },
+          {
+            "name": "Antal_testede",
+            "type": "integer",
+            "format": "default",
+            "title": "Amount of tests"
+          },
+          {
+            "name": "Antal_bekræftede_COVID-19",
+            "type": "integer",
+            "format": "default",
+            "title": "Positive tests"
+          },
+          {
+            "name": "Befolkningstal",
+            "type": "integer",
+            "format": "default",
+            "title": "Population per municipality"
+          },
+          {
+            "name": "Kumulativ_incidens_(per_100000)",
+            "type": "integer",
+            "format": "default",
+            "title": "Cumulative positive tests per municipality"
+          }
+        ]
+      }
+    }
+  ]
+}
