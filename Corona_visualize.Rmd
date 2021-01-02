@@ -1,0 +1,250 @@
+---
+title: "Visualizing_Corona"
+output: html_document
+---
+
+```{r, preprocessing and plotting, message=FALSE, warning=FALSE, include=FALSE}
+#Loading required packages
+library(pacman)
+p_load(remotes,tidyverse, ggplot, gganimate, lubridate)
+Sys.setenv("R_REMOTES_NO_ERRORS_FROM_WARNINGS" = "true")
+remotes::install_github("sebastianbarfort/mapDK")
+library(mapDK)
+
+#Loading data
+df <- read.csv2("Data_2412/Municipality_cases_time_series.csv")
+
+#Changing format of the data from wide format to long format in order to accomodate plotting
+data_long <- gather(df, kommune, pos_test, Roskilde:Samsø, factor_key=TRUE)
+
+#Loading data including population per municipality and preprocessing
+kommune_df <- read.csv2("Data_2412/Municipality_test_pos.csv",sep=";")
+names(kommune_df)[2] <- "kommune"
+kommune_df$Befolkningstal <- as.character(as.factor(kommune_df$Befolkningstal))
+kommune_df$Befolkningstal <- str_remove_all(kommune_df$Befolkningstal, "\\.")
+kommune_df$Befolkningstal <- as.numeric(kommune_df$Befolkningstal)
+
+#Merging population data and cases data
+data_long$kommune <- as.character(data_long$kommune)
+data_long$kommune <- ifelse(data_long$kommune=="Copenhagen", "København", data_long$kommune)
+kommune_df$kommune <- gsub("-", ".", kommune_df$kommune)
+data_long <- left_join(data_long, kommune_df, by="kommune")
+data_long <- data_long %>% select(c(date_sample, kommune, pos_test, Befolkningstal))
+
+#adding column for cumulative cases
+data_long$weekcum <- 0
+datoer <- sort(levels(as.factor(data_long$date_sample)))
+sen <- datoer[-c(1:7)]
+
+#Looping through each date and summing last 7 days of positive cases
+for(i in 1:nrow(data_long)){
+  if(data_long$date_sample[i] %in% sen){
+    print(i)
+    
+    data_long$weekcum[i] <- sum(data_long[data_long$kommune==data_long$kommune[i]& 
+                                            data_long$date_sample %in%datoer[(which(datoer==data_long$date_sample[i])-6):which(datoer==data_long$date_sample[i])],]$pos_test)
+  }
+}
+
+#Creating per 100,000 citizens measure
+data_long$prhund_week <- (data_long$weekcum/data_long$Befolkningstal)*100000
+
+#Altering names
+data_long$kommune <- tolower(data_long$kommune)
+data_long$kommune <- gsub("\\.", "", data_long$kommune)
+data_long$kommune <- gsub("æ", "ae", data_long$kommune)
+data_long$kommune <- gsub("ø", "oe", data_long$kommune)
+
+#Choosing only sundays
+b <- datoer[-c(1:3)][seq(1, length(datoer[-c(1:3)]), 7)]
+sundays <- data_long[data_long$date_sample %in% b,]
+
+
+#Creating empty data frame for gg-objects
+all <- data.frame()
+
+#Making dates into factor
+sundays$date_sample <- factor(sundays$date_sample)
+
+#Making plots for each sunday and extracting data object for final plotting
+for(w in levels(sundays$date_sample)){
+  animation <- sundays[sundays$date_sample == w,] %>%
+    mapDK(values = "prhund_week", id = "kommune",
+                                 data = .)
+  a <- as.data.frame(((animation$data)))
+  a$date_sample <- w
+  all <- rbind(all, a)
+}
+
+#Creating shell plot
+animation <- sundays[sundays$date_sample=="2020-09-06",] %>%
+    mapDK(values = "prhund_week", id = "kommune",data = .)+
+  scale_fill_gradientn(colours = c("#DDEDC9", "#ff6700", "#f40f2a"))+labs(fill = "Cases per 100.000")+theme(plot.title = element_text(size=15))
+
+#Adding all data to the shell plot object
+animation$data <- all
+
+#Animating and adding labels
+kommune_ani <- animation+transition_states(date_sample)+
+        labs(title='Positive tests per. 100.000 in week leading up to {closest_state}',
+caption='Source: SSI.dk')
+animation <- animate(kommune_ani, nframes = 450, fps = 15 ,width = 1200, height = 900)
+
+```
+
+```{r lineplot, message=FALSE, warning=FALSE, include=FALSE}
+#loading tested persons data in order to make positive percentage
+df_tests <- read.csv2("corona2511/Municipality_tested_persons_time_series.csv")
+
+#Altering data frame, selecting relevant columns 
+all_tests <- df_tests %>%
+    mutate(Total = select(., Copenhagen:Aalborg) %>% rowSums(na.rm = TRUE)) %>%
+  select(PrDate_adjusted, Total)
+names(all_tests)[1] <- "date_sample"
+
+#Summarizing the data to plot per day stats
+prdag <- data_long %>% group_by(date_sample) %>% summarise(cases = sum(pos_test))
+prdag <- left_join(prdag, all_tests)
+
+#Creating the positive percentage
+prdag$pos_procent <- (prdag$cases/prdag$Total)*100
+
+#removing last plot, as it doesn't contain full information due to latency in the available data from ssi.dk
+prdag <- prdag[-length(prdag),]
+
+#Plotting the pr day data
+line <- ggplot(prdag, aes(x = ymd(date_sample), y = cases)) + geom_point(colour = "red") + geom_line(colour = "red")+ geom_line(mapping = aes(x = ymd(date_sample), y = 50*pos_procent))+
+  ylim(0,1400)+ xlim(ymd("2020-02-26"), ymd("2020-11-06"))+
+  geom_text(x = ymd("2020-04-30"), y=1300, label ="Percentage positive tests",size = 15)+
+  geom_text(x = ymd("2020-04-03"), y=1375, label ="Total cases", colour="red",size = 15)+
+  xlab("Date")+ylab("Cases per day")+
+  theme(axis.title=element_text(size=20,face="bold"),
+                   axis.text=element_text(size=15))+
+  theme_bw()+
+  transition_reveal(ymd(date_sample))+labs(title='Total cases and percentage positive at {frame_along}',
+caption='Source: SSI.dk')
+
+#Animating the plot
+animation_line <- animate(line, nframes = 450, fps = 15 ,width = 1200, height = 900)
+anim_save("lineplot_pos.gif", animation_line)
+
+```
+
+```{r, echo=FALSE}
+animation
+```
+
+```{r kommuner, echo=FALSE}
+
+animation_line
+
+```
+
+
+```{r regioner, message=FALSE, warning=FALSE, include=FALSE}
+#Loading regional data on newly admitted to hpsiotals
+df_hospitalized <- read.csv2("Data_2412/Newly_admitted_over_time.csv")
+
+#changing the data from wide to long format and altering region names
+data_long_h <- gather(df_hospitalized, region, pos_test, Hovedstaden:Nordjylland, factor_key=TRUE)
+data_long_h$region <- factor(data_long_h$region, 
+                   levels=c("Hovedstaden","Sjælland","Syddanmark","Midtjylland","Nordjylland"),
+                             labels = c("regionhovedstaden","regionsjaelland","regionsyddanmark",
+                                        "regionmidtjylland","regionnordjylland"))
+
+#Adding population numbers from the regions' websites
+region_befolkning <- data.frame(region = c("regionhovedstaden","regionsjaelland","regionsyddanmark",
+                                        "regionmidtjylland","regionnordjylland"),
+                                befolkning =c(1846023,836738, 1223000,1321000,589148 ))
+
+#Joining newly admitted and population data
+data_long_h <- left_join(data_long_h,region_befolkning, by="region")
+names(data_long_h)[1] <- "date_sample"
+
+#adding column for cumulative cases
+data_long_h$weekcum <- 0
+datoer <- sort(levels(as.factor(data_long_h$date_sample)))
+sen <- datoer[-c(1:7)]
+
+#Looping through each date and summing last 7 days of positive cases
+for(i in 1:nrow(data_long_h)){
+  if(data_long_h$date_sample[i] %in% sen){
+    print(i)
+    
+    data_long_h$weekcum[i] <- sum(data_long_h[data_long_h$region==data_long_h$region[i]& 
+                                            data_long_h$date_sample %in%datoer[(which(datoer==data_long_h$date_sample[i])-6):which(datoer==data_long_h$date_sample[i])],]$pos_test)
+  }
+}
+
+#Creating per 100,000 citizens measure
+data_long_h$prhund_week <- (data_long_h$weekcum/data_long_h$befolkning)*100000
+
+#Selecting data from each sunday
+b <- datoer[seq(1, length(datoer), 7)]
+sundays_regions <- data_long_h[data_long_h$date_sample %in% b,]
+
+#Creating empty data frame for gg-objects
+all_regions <- data.frame()
+
+#Making dates into factor
+sundays_regions$date_sample <- factor(sundays_regions$date_sample)
+
+
+#Making plots for each sunday and extracting data object for final plotting
+for(w in levels(sundays_regions$date_sample)){
+  animation <- sundays_regions[sundays_regions$date_sample == w,] %>%
+    mapDK(values = "prhund_week", id = "region",
+                                 data = ., detail="region")
+  a <- as.data.frame(((animation$data)))
+  a$date_sample <- w
+  all_regions <- rbind(all_regions, a)
+
+  
+}
+
+#Creating shell gg-object
+animation_region <- sundays_regions[sundays_regions$date_sample=="2020-09-06",] %>%
+    mapDK(values = "prhund_week", id = "region",data = ., detail = "region")+
+  scale_fill_gradientn(colours = c("#DDEDC9", "#ff6700", "#f40f2a"))+labs(fill = "Cases per 100.000")+theme(plot.title = element_text(size=15))
+
+#Adding all data object 
+animation_region$data <- all_regions
+
+#Animating The map plot
+region_ani <- animation_region+transition_states(date_sample)+
+        labs(title='Hospitalized citizens per. 100.000 in week leading up to {closest_state}',
+caption='Source: SSI.dk')
+
+animation_region <- animate(region_ani, nframes = 450, fps = 15,width = 1200, height = 900)
+```
+
+```{r lineplot hospitalized,echo=FALSE}
+#Grouping the newly hospitalized data per day 
+pr_day <- data_long_h %>%  group_by(date_sample) %>% summarise(posi =sum(pos_test))
+
+#Plotting the data
+hospitalized <- ggplot(pr_day, aes(x=ymd(date_sample), y=posi))+ geom_point(colour = "red") +
+  geom_line(colour = "red")+
+  xlab("Date")+ylab("Hospitalized per day")+
+  theme(axis.title=element_text(size=20,face="bold"),
+                   axis.text=element_text(size=15))+ ggtitle("Newly Hospitalized per day")+
+  theme_bw()+
+  transition_reveal(ymd(date_sample))+
+  transition_reveal(ymd(date_sample))+labs(title='Total amount of newly hospitalized at {frame_along}',
+caption='Source: SSI.dk')
+
+
+#animating the plot
+hospitalized <- animate(hospitalized, nframes = 450, fps = 15 ,width = 1200, height = 900)
+
+```
+
+```{r, echo=FALSE}
+animation_region
+
+```
+
+```{r hospitalized plots, echo=FALSE}
+hospitalized
+
+```
